@@ -1,7 +1,8 @@
 import React from 'react';
 
-//import {Box, Divider} from '@material-ui/core';
+import {Paper, Box, Divider} from '@mui/material';
 import styled from '@emotion/styled';
+// import ReactJson from 'react-json-view'
 //import V from 'voca';
 import { useMatch } from "react-location";
 
@@ -14,9 +15,15 @@ import LnDraw from '../components/lndraw';
 //     flex-direction: row;
 //     justify-content: space-evenly;
 // `
+const LnPaper = styled(Paper)`
+    flex:1;
+`
 
-const LnNumbers = styled.div`
-    max-width: 500px;
+const LnNumbers = styled(Paper)`
+    width: 500px;
+    flex:1;
+    overflow-y: scroll;
+    margin-bottom: 30px;
 `
 
 const LnCharts = styled.div`
@@ -44,21 +51,37 @@ const GamePage = (props) => {
     // console.log('LnGamesDetails Router: ', router);
 
     //const title = V.titleCase(router.query.game).replace('-', ' ');
-    const data = useMatch().gamedata;
-    const title = 'title 1';
+    const gameData = useMatch().data;
 
+    // const arr = [];
+    // const fillarr = (arr) => {
 
+    //     for (var i = 0; i < 100; i++){
+    //         arr.push(i);
+    //     }
+    // }
+
+    // fillarr(arr);
 
     return (
 
+
         <>
-            <LnNumbers>
-                <LnTitle>{title}</LnTitle>
-                <LnDraw details={JSON.stringify(data)}/>
-            </LnNumbers>
-            <LnCharts>
+            {/* <LnNumbers>
+                {
+                    arr.map(a => {
+
+                        return (<div key={a}>{`HELLO ${a}`}</div>)
+                    
+                    })
+                }
+            </LnNumbers> */}
+            {/* <LnNumbers> */}
+            <LnDraw data={gameData} />
+            {/* </LnNumbers> */}
+            {/* <LnCharts>
                 <LnTitle>Chart for: {title}</LnTitle>
-            </LnCharts>
+            </LnCharts> */}
         </>
 
     )

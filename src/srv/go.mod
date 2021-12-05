@@ -7,8 +7,7 @@ require (
 	github.com/andybalholm/cascadia v1.2.0 // indirect
 	github.com/gorilla/handlers v1.5.1
 	github.com/gorilla/mux v1.8.0
-	github.com/nxadm/tail v1.4.8 // indirect
-	github.com/onsi/ginkgo v1.15.0
+	github.com/onsi/ginkgo v1.16.5
 	github.com/onsi/gomega v1.10.5
 	github.com/pieterclaerhout/go-waitgroup v1.0.7
 	github.com/pkg/browser v0.0.0-20210115035449-ce105d075bb4

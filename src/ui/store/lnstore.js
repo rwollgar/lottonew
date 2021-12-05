@@ -1,4 +1,5 @@
 import create from 'zustand';
+
 import produce from 'immer';
 import pipe from 'ramda/es/pipe';
 //import fetch from 'node-fetch';
@@ -48,8 +49,9 @@ const useLnStore = createStore((set) => ({
         console.log('initStore...');
 
         try {
-            const pInfo = await fetch(`${apiUrl}/games`, {mode: 'cors'});
-            const data = await pInfo.json();
+            // const pInfo = await fetch(`${apiUrl}/games`, {mode: 'cors'});
+            // const data = await pInfo.json();
+            const data = await dataApi.getGames();
             set(() => ({
                 initialised: true, 
                 data: data.sort((a,b) => {return a.order - b.order;})
@@ -61,9 +63,10 @@ const useLnStore = createStore((set) => ({
 
     getGameData: (game) => set(async (state) => {
 
-        const uri = `${rsUrl}/games/${game}`;
-        console.log('Get Game: ', uri);
-        const data = await fetch(uri, { mode: 'cors', method: 'GET' });
+        // const uri = `${rsUrl}/games/${game}`;
+        // console.log('Get Game: ', uri);
+        // const data = await fetch(uri, { mode: 'cors', method: 'GET' });
+        const data = await dataApi.getGameData(game);
         set(() => ({ gameData: data }));
         
     })
@@ -151,4 +154,30 @@ const useLnStore = createStore((set) => ({
 
 }))
 
-export default useLnStore;
+const dataApi = {
+
+    getGameData: async (game) => {
+
+        const uri = `${apiUrl}/games/${game}`;
+        console.log('Get Game: ', uri);
+        const gameInfo = await fetch(uri, { mode: 'cors', method: 'GET' });
+        const data = await gameInfo.json();
+        console.log(data);
+        return data;
+        
+    },
+
+    getGames: async () => {
+
+        const games = await fetch(`${apiUrl}/games`, {mode: 'cors'});
+        const data = await games.json();
+
+        return data;
+
+    }
+}
+
+export {
+    useLnStore,
+    dataApi
+}

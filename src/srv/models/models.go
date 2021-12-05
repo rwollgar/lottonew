@@ -380,6 +380,19 @@ func (di *drawInfo) generateRandomPicks(apikey string, url string) {
 
 }
 
+func (g *game) GetDraw(drawID int) (draw, error) {
+
+	var d draw
+
+	for k := range g.Draws {
+		if g.Draws[k].DrawID == drawID {
+			return g.Draws[k], nil
+		}
+	}
+
+	return d, fmt.Errorf("Can't find Draw with DarwID: %d", drawID)
+}
+
 func (g game) printGame() {
 	fmt.Printf("%-15s\t%d\t%d\t%d\t%d\t%d\n", g.Name, g.StandardNumbers, g.Supplementary, g.MaxNumber, g.MaxSupplementary, len(g.Draws))
 }

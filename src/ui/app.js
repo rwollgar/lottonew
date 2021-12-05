@@ -13,7 +13,8 @@ import styled from '@emotion/styled';
 //import LnGamePanel from "./components/gamepanel";
 //import LnDraw from './components/lndraw';
 import LnLayout from './components/layout';
-import useLnStore from './store/lnstore';
+import { useLnStore, dataApi } from './store/lnstore';
+//import lnStore from './store/lnStore';
 
 import HomePage from './pages/home';
 import GamePage from './pages/game';
@@ -61,6 +62,8 @@ const Footer = styled(Box)`
 
 const Content = styled(Paper)`
     flex: 1;
+    display: flex;
+    flex-direction: column;
     padding: .5rem;
     border-style: solid;
     border-width: 2px;
@@ -110,7 +113,7 @@ const routes = [
             element: <GamePage />,
             loader: async ({ params: { gameid }, parentMatch }) => (
                 {
-                    gamedata: await useLnStore().getGameData(gameid)
+                    gamedata: await dataApi.getGameData(gameid)
                 }
             )
         }]
@@ -121,7 +124,6 @@ const routes = [
 const App = (props) => {
 
     const store = useLnStore();
-    //const imageMap = store.imageMap;
 
     useAsyncEffect(async () => {
         console.log('App: Hello from useEffect');
@@ -130,17 +132,17 @@ const App = (props) => {
 
     return (
         <Router routes={routes} location={location}>
-            <OuterContainer height="98%">
-                <Titlebar><Typography>TITLE</Typography></Titlebar>
-                <Commandbar><Typography>COMMANDS</Typography></Commandbar>
+            <OuterContainer id="outercontainer"height="98%">
+                <Titlebar id="titlebar"><Typography>TITLE</Typography></Titlebar>
+                <Commandbar id="commandbar"><Typography>COMMANDS</Typography></Commandbar>
 
-                <Content>
-                    <LnLayout>
+                <Content id="content">
+                    <LnLayout id="layout">
                         <Outlet />
                     </LnLayout>
                 </Content>
 
-                <Footer><Typography>FOOTER</Typography></Footer>
+                <Footer id="footer"><Typography>FOOTER</Typography></Footer>
             </OuterContainer>
         </Router>
     )

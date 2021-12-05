@@ -22,7 +22,10 @@
         "Go:build:linux": "cd src/srv/cmd && cross-env GOOS=linux cross-env GOARCH=amd64 go build -o ../../../build/linux/lottonumbers && cd ../../../",
         "Go:build:all": "npm-run-all -p -l Go:build:win Go:build:mac Go:build:linux",
         "Go:run:win": "npm-run-all -s -l Go:build:win Go:runserver:win",
-        "Go:runserver:win": "npm-run build/windows/lottonumbers.exe --web"
+        "Go:runserver:win": "npm-run build/windows/lottonumbers.exe --web",
+
+        "ginkgo:test:watch": "cd ./src/srv &  ginkgo watch -r --v",
+        "ginkgo:models:test": "cd ./src/srv & ginkgo -r ./models --v"
     },
     "oldscripts": {
         "buildgo:watch:win": "npm-watch buildgo:win",
@@ -42,7 +45,13 @@
         "server:win": "npm-run-all -s -l buildgo:win runserver:win",
         "server:linux": "npm-run-all -s -l buildgo:linux runserver:linux",
         "hotdevall:win": "run-p runserver:win hotdev",
-        "hotdevall:linux": "run-p runserver:linux hotdev"
+        "hotdevall:linux": "run-p runserver:linux hotdev",
+
+        "ginkgo:test:watch": "cd ./src/srv &  ginkgo watch -r --v",
+        "ginkgo:models:test": "cd ./src/srv & ginkgo -r ./models --v",
+        "go-test:handlers": "cd ./src/zdapiserver/webserver & env-cmd -f ../../../.env go test",
+        "go-test:helpers": "cd ./src/zdapiserver/models & env-cmd -f ../../../.env go test"
+
     },
     "author": "",
     "license": "ISC",
@@ -51,14 +60,14 @@
         "@mui/material": "5.1.1"
     },
     "dependencies": {
-        "@mui/icons-material": "5.2.0",
-        "@mui/material": "5.2.1",
-        "@mui/lab": "5.0.0-alpha.57",
-        "@mui/styles": "5.2.1",
-        "@emotion/react": "^11.6.0",
+        "@emotion/react": "^11.7.0",
         "@emotion/styled": "^11.6.0",
-        "core-js": "^3.19.1",
-        "highcharts": "^9.3.1",
+        "@mui/icons-material": "5.2.0",
+        "@mui/lab": "5.0.0-alpha.58",
+        "@mui/material": "5.2.2",
+        "@mui/styles": "5.2.2",
+        "core-js": "^3.19.2",
+        "highcharts": "^9.3.2",
         "highcharts-react-official": "^3.1.0",
         "immer": "^9.0.7",
         "isomorphic-unfetch": "^3.1.0",
@@ -70,9 +79,10 @@
         "react-jsx-highcharts": "^4.3.1",
         "react-location": "^3.2.15",
         "react-perfect-scrollbar": "^1.5.8",
+        "react-virtuoso": "^2.2.8",
         "use-async-effect": "^2.2.3",
         "voca": "^1.4.0",
-        "zustand": "^3.6.5"
+        "zustand": "^3.6.6"
     },
     "devDependencies": {
         "@babel/plugin-proposal-class-properties": "^7.16.0",
@@ -87,15 +97,13 @@
         "@babel/preset-react": "^7.16.0",
         "@babel/preset-typescript": "^7.16.0",
         "@emotion/babel-plugin": "^11.3.0",
-        "@pmmmwh/react-refresh-webpack-plugin": "^0.5.2",
-        "@swc/cli": "^0.1.51",
-        "@swc/core": "^1.2.111",
+        "@pmmmwh/react-refresh-webpack-plugin": "^0.5.3",
         "babel-core": "^6.26.3",
-        "babel-jest": "^27.3.1",
+        "babel-jest": "^27.4.2",
         "babel-loader": "^8.2.3",
         "babel-plugin-dynamic-import-node": "^2.3.3",
         "babel-plugin-jsx-control-statements": "^4.1.1",
-        "babel-plugin-styled-components": "^2.0.1",
+        "babel-plugin-styled-components": "^2.0.2",
         "cross-env": "^7.0.3",
         "css-loader": "^6.5.1",
         "enzyme": "^3.11.0",
@@ -104,15 +112,15 @@
         "handlebars": "^4.7.7",
         "handlebars-loader": "^1.7.1",
         "html-webpack-plugin": "^5.5.0",
-        "jest": "^27.3.1",
+        "jest": "^27.4.3",
         "jsx-control-statements": "^3.2.8",
         "nodemon": "^2.0.15",
         "npm-run": "^5.0.1",
         "npm-run-all": "^4.1.5",
         "npm-watch": "^0.11.0",
+        "react-json-view": "^1.21.3",
         "react-refresh": "^0.11.0",
         "react-test-renderer": "^17.0.2",
-        "swc-loader": "^0.1.15",
         "typescript": "^4.5.2",
         "url-loader": "^4.1.1",
         "webpack": "^5.64.4",

@@ -2,6 +2,8 @@ import React from 'react';
 import m from 'moment';
 import {take, takeLast} from 'ramda';
 
+import {Typography} from '@mui/material';
+
 import {useMatch} from 'react-location';
 
 import styled from '@emotion/styled';
@@ -9,13 +11,9 @@ import styled from '@emotion/styled';
 import hlp from '../../utils/helpers';
 
  //(Container)
-const _lnDraws = styled.div`
+const LnDraws = styled.div`
     background-color: inherit;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    height: 85vh;
+    max-width: 460px;
     overflow-x : hidden;
     overflow-y: scroll;
     border: solid lightgrey 2px;
@@ -36,9 +34,9 @@ const _lnNumber = styled.div`
     height: 32px;
     border: ${props => props.missing ? '0px' : '1px'} solid black;
     border-radius: 4px;
-    padding: 1px 2px 1px 2px;
+    padding: 4px 2px 1px 2px;
     font-size: 20px;
-    font-weight: ${props => props.supp ? 500 : 400};
+    font-weight: ${props => props.supp ? 600 : 400};
     text-align: center;
     color: ${props => props.supp ? 'green' : 'black'};
     &:hover {
@@ -80,11 +78,9 @@ const LnDrawNumbers = (props) => {
 
     return (
         
-        <_lnDrawContainer>
+        <_lnDrawContainer id="drawcontainer">
 
-            <Link href="#" onClick={linkClick}>
-                <LnDrawId>{draw.drawid}</LnDrawId>
-            </Link>
+            <a href="#" onClick={linkClick}><LnDrawId>{draw.drawid}</LnDrawId></a>
 
             {take(std,draw.numbers).map((n) => {
                 if(n === 0) {
@@ -104,28 +100,25 @@ const LnDrawNumbers = (props) => {
 
 const LnDraw = (props) =>  {
 
-    console.log('LnDraw: ', props.details);
+    //console.log('LnDraw: ', props.details);
     //console.log('LnDraw: ', props.details.draws.length);
-
-    const params = useMatch().params;
+    const { gamedata } = props.data;
 
     return (
-        <div>{JSON.stringify(params)}</div>
+        
+        <LnDraws id="draws">
+            <Typography component="div">
+                {Object.values(gamedata.draws).map((d) => {    
+                    return (                    
+                        <LnDrawNumbers  key={d.drawid} 
+                                        draw={d} 
+                                        std={gamedata.standardnumbers} 
+                                        supp={gamedata.supplementary}/>
+                    )
+                })}
+            </Typography>
+        </LnDraws>
     )
-
-    // return (
-    //     <_lnDraws>
-    //         {props.details.draws.map((d) => {    
-    //             return (                    
-    //                 <LnDrawNumbers  key={d.drawid} 
-    //                                 draw={d} 
-    //                                 std={props.details.standardnumbers} 
-    //                                 supp={props.details.supplementary}/>
-    //             )
-    //         })}
-            
-    //     </_lnDraws>
-    // )
 }
 
 export default LnDraw;
