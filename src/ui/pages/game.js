@@ -15,25 +15,25 @@ import LnDraw from '../components/lndraw';
 //     flex-direction: row;
 //     justify-content: space-evenly;
 // `
-const LnPaper = styled(Paper)`
-    flex:1;
-`
+// const LnPaper = styled(Paper)`
+//     flex:1;
+// `
 
-const LnNumbers = styled(Paper)`
-    width: 500px;
-    flex:1;
-    overflow-y: scroll;
-    margin-bottom: 30px;
-`
+// const LnNumbers = styled(Paper)`
+//     width: 500px;
+//     flex:1;
+//     overflow-y: scroll;
+//     margin-bottom: 30px;
+// `
 
-const LnCharts = styled.div`
-    min-width: 1000px;
-`
+// const LnCharts = styled.div`
+//     min-width: 1000px;
+// `
 
-const LnTitle = styled.div`
-    font-size: 1rem;
-    font-weight: bold;
-`
+// const LnTitle = styled.div`
+//     font-size: 1rem;
+//     font-weight: bold;
+// `
 
 const GamePage = (props) => {
 

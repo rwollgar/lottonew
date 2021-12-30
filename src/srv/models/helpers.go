@@ -12,8 +12,65 @@ import (
 	"github.com/src/srv/lottoerrors"
 )
 
+func ConfigureGames() map[string]game {
+
+	games := make(map[string]game)
+
+	games["oz-lotto"] = game{
+		Name:             "oz-lotto",
+		StandardNumbers:  7,
+		Supplementary:    2,
+		MaxNumber:        45,
+		MaxSupplementary: 45,
+		Format:           "csv",
+		DrawOffset:       1,
+		Order:            4}
+
+	games["powerball"] = game{
+		Name:             "powerball",
+		StandardNumbers:  7,
+		Supplementary:    1,
+		MaxNumber:        35,
+		MaxSupplementary: 20,
+		Format:           "csv",
+		DrawOffset:       1,
+		Order:            5}
+
+	games["saturday-lotto"] = game{
+		Name:             "saturday-lotto",
+		StandardNumbers:  6,
+		Supplementary:    2,
+		MaxNumber:        45,
+		MaxSupplementary: 45,
+		Format:           "csv",
+		DrawOffset:       2,
+		Order:            3}
+
+	games["monday-lotto"] = game{
+		Name:             "monday-lotto",
+		StandardNumbers:  6,
+		Supplementary:    2,
+		MaxNumber:        45,
+		MaxSupplementary: 45,
+		Format:           "csv",
+		DrawOffset:       2,
+		Order:            1}
+
+	games["wednesday-lotto"] = game{
+		Name:             "wednesday-lotto",
+		StandardNumbers:  6,
+		Supplementary:    2,
+		MaxNumber:        45,
+		MaxSupplementary: 45,
+		Format:           "csv",
+		DrawOffset:       2,
+		Order:            3}
+
+	return games
+}
+
 //func extractDataURL(games map[string]game, body io.ReadCloser) (map[string]game, error) {
-func extractDataURL(games map[string]game, body io.ReadCloser) error {
+func setDataURL(games map[string]game, body io.ReadCloser) error {
 
 	const op lottoerrors.Operation = "helpers:extractDataURL"
 
@@ -100,7 +157,7 @@ func generateBuckets(startDraw draw, numberOfDraws int, g game) *drawInfo {
 	//unique := make(map[int]int)
 
 	startIndex := startDraw.ID //len(g.draws) - startDraw
-	endIndex := startIndex + numberOfDraws + 1
+	endIndex := startIndex + numberOfDraws
 
 	firstDraw := g.Draws[startIndex]
 

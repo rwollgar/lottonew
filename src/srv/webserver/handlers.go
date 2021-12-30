@@ -1,101 +1,76 @@
 package webserver
 
 import (
-	"encoding/json"
+	//"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
 
-	"github.com/gorilla/mux"
+	"github.com/labstack/echo/v4"
 	"github.com/src/srv/models"
 )
 
-//Handler1 => Handler
-func Handler1() {
-	fmt.Println("Package: handlers")
+func (s ServerContext) getGames(c echo.Context) error {
+
+	p := c.Param("game")
+
+	if p == "" {
+		return c.JSON(http.StatusOK, models.GetGamesInfo())
+	}
+
+	g, ok := models.GetGames()[c.Param("game")]
+
+	if !ok {
+		return echo.NewHTTPError(http.StatusNotFound, fmt.Sprintf("Error: Game <%s> not found.", c.Param("game")))
+	}
+
+	return c.JSON(http.StatusOK, g)
+
 }
 
-func (s ServerContext) handleGetGames() http.HandlerFunc {
+func (s ServerContext) getDrawsForGame(c echo.Context) error {
 
-	return func(w http.ResponseWriter, r *http.Request) {
+	g, ok := models.GetGames()[c.Param("game")]
 
-		// i := 0
-		// g := make([]game, len(models.GetGames()))
+	if !ok {
+		return echo.NewHTTPError(http.StatusNotFound, fmt.Sprintf("Error: Game <%s> not found.", c.Param("game")))
+	}
 
-		// for _, v := range models.GetGames() {
-		// 	g[i] = v
-		// 	i++
-		// }
+	drawid, err := strconv.Atoi(c.Param("draw"))
 
-		w.Header().Set("Content-Type", "application/json")
-		_ = json.NewEncoder(w).Encode(models.GetGamesInfo())
+	if err != nil {
 
-		fmt.Println("handleGetGames")
+		return c.JSON(http.StatusOK, g.Draws)
 
 	}
+
+	for _, d := range g.Draws {
+
+		if d.DrawID == drawid {
+
+			return c.JSON(http.StatusOK, d)
+
+		}
+	}
+
+	return echo.NewHTTPError(http.StatusNotFound, fmt.Sprintf("Error: Draw for game <%s> and draw Id <%s> not found.", c.Param("game"), c.Param("draw")))
+
 }
 
-func (s ServerContext) handleGetGame() http.HandlerFunc {
+func (s ServerContext) getMetrics(c echo.Context) error {
 
-	return func(w http.ResponseWriter, r *http.Request) {
+	g := c.Param("game")
+	_ = g
 
-		params := mux.Vars(r)
+	draw, err := strconv.Atoi(c.Param("draw"))
+	_ = draw
 
-		g, ok := models.GetGames()[params["game"]]
-
-		w.Header().Set("Content-Type", "application/json")
-
-		if !ok {
-			w.WriteHeader(http.StatusNotFound)
-			_ = json.NewEncoder(w).Encode(fmt.Sprintf("Error: Game <%s> not found.", params["game"]))
-			return
-		}
-
-		_ = json.NewEncoder(w).Encode(g)
-		fmt.Println("handleGetGame")
-
+	if err != nil {
+		return echo.NewHTTPError(http.StatusNotFound, fmt.Sprintf("Error: Invalid draw <%s> not found.", c.Param("draw")))
 	}
-}
 
-func (s ServerContext) handleGetDrawsForGame() http.HandlerFunc {
+	fmt.Println("handleGetDrawsForGame")
 
-	return func(w http.ResponseWriter, r *http.Request) {
-
-		params := mux.Vars(r)
-
-		g, okGame := models.GetGames()[params["game"]]
-
-		w.Header().Set("Content-Type", "application/json")
-
-		if !okGame {
-			w.WriteHeader(http.StatusNotFound)
-			_ = json.NewEncoder(w).Encode(fmt.Sprintf("Error: Draws for game <%s> not found.", params["game"]))
-			return
-		}
-
-		drawid, okDrawid := strconv.Atoi(params["drawid"])
-
-		if okDrawid != nil {
-
-			_ = json.NewEncoder(w).Encode(g.Draws)
-			return
-		}
-
-		for _, d := range g.Draws {
-
-			if d.DrawID == drawid {
-
-				_ = json.NewEncoder(w).Encode(d)
-				return
-
-			}
-		}
-
-		w.WriteHeader(http.StatusNotFound)
-		_ = json.NewEncoder(w).Encode(fmt.Sprintf("Error: Draw for game <%s> and draw Id <%s> not found.", params["game"], params["drawid"]))
-
-		fmt.Println("handleGetDrawsForGame")
-
-	}
+	return c.String(http.StatusOK, "OK")
 
 }

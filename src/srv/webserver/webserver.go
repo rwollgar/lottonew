@@ -5,24 +5,21 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"strings"
 
-	"github.com/gorilla/handlers"
-	"github.com/gorilla/mux"
 	"github.com/pkg/browser"
-	"github.com/rs/cors"
+
+	"github.com/src/srv/models"
+
 	//errors "github.com/src/srv/errors"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 //ServerContext struct
 type ServerContext struct {
-	Router             *mux.Router
+	Args               models.CmdArgs
 	RandomNumberAPIURL string
-	RandomNumberAPIKEY string
-	WebUI              bool
-	WebServer          bool
-	Port               int
 	Cwd                string
 	RootDir            string
 }
@@ -35,39 +32,46 @@ func Webserver() {
 //InitWebserver => Initialisze webserver and routes
 func (s *ServerContext) InitWebserver() error {
 
-	if s.WebUI || s.WebServer {
+	if s.Args.UseWebUI || s.Args.UseWebserver {
 
-		s.Router.Handle("/api/games", handlers.LoggingHandler(os.Stdout, s.validateToken(s.handleGetGames()))).Methods("GET")
-		s.Router.Handle("/api/games/{game}", handlers.LoggingHandler(os.Stdout, s.handleGetGame())).Methods("GET")
-		s.Router.Handle("/api/games/{game}/draws", handlers.LoggingHandler(os.Stdout, s.handleGetDrawsForGame())).Methods("GET")
-		s.Router.Handle("/api/games/{game}/draws/{drawid}", handlers.LoggingHandler(os.Stdout, s.handleGetDrawsForGame())).Methods("GET")
-		s.Router.PathPrefix("/").Handler(http.StripPrefix("/web", http.FileServer(http.Dir("../web/spa"))))
+		e := echo.New()
 
-		serverURL := fmt.Sprintf(":%d", s.Port)
-		browserURL := fmt.Sprintf("http://localhost:%d/web", s.Port)
+		// s.Context = echo.New().NewContext()
+		e.Use(middleware.CORS())
+		e.Use(middleware.Logger())
 
-		if s.WebUI {
+		e.Static("assets", s.Args.StaticDir)
+
+		g := e.Group("api/")
+
+		g.Use(middleware.JWTWithConfig(middleware.JWTConfig{
+			Skipper:     jwtSkipper,
+			TokenLookup: "query:token",
+			SigningKey:  s.Args.JwtKey,
+		}))
+
+		g.GET("games", s.getGames)
+		g.GET("games/:game", s.getGames)
+		g.GET("games/:game/draws", s.getDrawsForGame)
+		g.GET("games/:game/draws/:draw", s.getDrawsForGame)
+		g.GET("games/:game/:draw/drawmetrics", s.getMetrics)
+
+		serverURL := fmt.Sprintf("localhost:%d", s.Args.Port)
+		browserURL := fmt.Sprintf("http://localhost:%d/web", s.Args.Port)
+
+		if s.Args.UseWebUI {
 			err := browser.OpenURL(browserURL)
 			log.Printf("Error opening browser: %s (%s)", browserURL, err)
 		}
 
-		_ = log.Output(0, fmt.Sprintf("\n\nRunning Web Server on :%d\nPress CTRL+C to stop.", s.Port))
-		handler := cors.Default().Handler(s.Router)
-		log.Fatal(http.ListenAndServe(serverURL, handler))
+		_ = log.Output(0, fmt.Sprintf("\n\nRunning Web Server on http://%s\nPress CTRL+C to stop.", serverURL))
+
+		e.Logger.Fatal(e.Start(serverURL))
 
 	}
 
 	return nil
 
-}
-
-//func (s *ServerContext) validateToken(h http.HandlerFunc) http.HandlerFunc {
-func (s *ServerContext) validateToken(h http.HandlerFunc) http.HandlerFunc {
-
-	return func(w http.ResponseWriter, r *http.Request) {
-		h(w, r)
-		fmt.Println("Validating JWToken")
-	}
 }
 
 //ReturnError => Return error from webserver
@@ -88,5 +92,11 @@ func ReturnError(w http.ResponseWriter, r *http.Request, status int, err error) 
 	}{[]resp{
 		{Code: code, Message: msg},
 	}})
+
+}
+
+func jwtSkipper(c echo.Context) bool {
+
+	return true
 
 }

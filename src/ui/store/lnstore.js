@@ -9,17 +9,27 @@ import lotto1 from '../assets/img/lottoballs_1.jpg';
 import lotto2 from '../assets/img/lottoballs_2.jpg';
 import lotto3 from '../assets/img/lottoballs_3.jpg';
 
-//const rsUrl = 'https://redshiftify-prod.int.streamco.com.au';
 const apiUrl = 'http://localhost:1337/api';
 
+// const myhook_mw = config => (set, get, api) => config(args => {
+//     console.log('BEFORE MYHOOK: ', get().selectedDraw);
+//     set(args);
+//     console.log('AFTER MYHOOK: ', get().selectedDraw);
+// }, get, api);
 
-const immer_mw = config => (set, get, api) => config(fn => set(produce(fn)), get, api);
+const immer_mw = config => (set, get, api) => config(fn => {
+    //console.log('BEFORE: ', get().selectedDraw);
+    set(produce(fn))
+    //console.log('AFTER: ', get().selectedDraw);
+}, get, api);
+
 const log_mw = config => (set, get, api) => config(args => {
     console.log("  applying", args)
     set(args)
-    console.log("  new state", get())
+    //console.log("  new state", get())
 }, get, api);
 
+//const createStore = pipe(log_mw, myhook_mw, immer_mw, create);
 const createStore = pipe(log_mw, immer_mw, create);
 
 const useLnStore = createStore((set) => ({
@@ -29,6 +39,7 @@ const useLnStore = createStore((set) => ({
     lastError: null,
     data: [],
     gameData: null,
+    selectedDraw: null,
     imageMap: {
         'oz-lotto':lotto1,
         'powerball':lotto2,
@@ -69,6 +80,12 @@ const useLnStore = createStore((set) => ({
         const data = await dataApi.getGameData(game);
         set(() => ({ gameData: data }));
         
+    }),
+
+    setSelectedDraw: (id) => set((state) => {
+        //console.log('setSelectedDraw: ', id, state.selectedDraw);
+        state.selectedDraw = id;
+        //set((id) => ({ selectedDraw: id }));
     })
 
     // startRefresh: (value) => set((state) => {
@@ -176,6 +193,9 @@ const dataApi = {
 
     }
 }
+
+const unsub = useLnStore.subscribe(state => state.selectedDraw, console.log('HELLO'));
+
 
 export {
     useLnStore,

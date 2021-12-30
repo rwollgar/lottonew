@@ -64,7 +64,10 @@ var _ = ginkgo.Describe("Domain Models", func() {
 		// 	Format:           "csv",
 		// 	DrawOffset:       1}
 
-		// d := initDraw(draw{Game: &g, ID: 1}, record)
+		ginkgo.It("should return 5 games", func() {
+			games := ConfigureGames()
+			gomega.Expect(len(games)).To(gomega.Equal(5))
+		})
 
 		ginkgo.It("should return draw 1350", func() {
 			d, e := ozLotto.GetDraw(1350)
@@ -92,10 +95,6 @@ var _ = ginkgo.Describe("Domain Models", func() {
 			}))
 		})
 
-		// CrossSum:118
-		// Avg:16.86
-		// CrossSumSupp:200
-		// AvgSupp:22.22
 		ginkgo.It("should have these draw metrics", func() {
 			gomega.Expect(d.Metrics.CrossSum).To(gomega.Equal(float64(118)))
 			gomega.Expect(d.Metrics.CrossSumSupp).To(gomega.Equal(float64(200)))

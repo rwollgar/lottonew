@@ -2,13 +2,15 @@ import React from 'react';
 import m from 'moment';
 import {take, takeLast} from 'ramda';
 
-import {Typography} from '@mui/material';
+import {Typography, Button} from '@mui/material';
 
-import {useMatch} from 'react-location';
+//import {useMatch} from 'react-location';
 
 import styled from '@emotion/styled';
 
 import hlp from '../../utils/helpers';
+import { useLnStore } from '../store/lnstore';
+
 
  //(Container)
 const LnDraws = styled.div`
@@ -43,7 +45,7 @@ const _lnNumber = styled.div`
         background: ${hlp.env.theme.numberbg};
     }    
 `
-const _lnDrawid = styled.div`
+const LnId = styled.div`
     margin: 3px 10px 3px 3px;
     width: 60px;
     height: 32px;
@@ -55,32 +57,27 @@ const _lnDrawid = styled.div`
     text-align: center;
 `
 
-const _spacer = styled.div`
+const LnDrawSpacer = styled.div`
     margin-left: 10px;
 `
 
 const LnDrawId = (props) => {
 
     return (
-        <_lnDrawid>{props.children}</_lnDrawid>
+        <LnId>{props.children}</LnId>
     )
 }
 
 const LnDrawNumbers = (props) => {
 
     const {draw, std, supp} = props;
-    var dummy = 99;
-
-    const linkClick = (e) => {
-        e.preventDefault();
-        console.log(e.target.outerText);
-    }
 
     return (
         
         <_lnDrawContainer id="drawcontainer">
 
-            <a href="#" onClick={linkClick}><LnDrawId>{draw.drawid}</LnDrawId></a>
+            <a href="#" onClick={props.onDrawClick}><LnDrawId>{draw.drawid}</LnDrawId></a>
+            {/* <Button variant="contained" size="small" onClick={props.onDrawClick}>{draw.drawid}</Button> */}
 
             {take(std,draw.numbers).map((n) => {
                 if(n === 0) {
@@ -89,7 +86,7 @@ const LnDrawNumbers = (props) => {
                     return (<_lnNumber key={`${draw.drawid}${n}`}>{n}</_lnNumber>)
                 }
             })}
-            <_spacer/>            
+            <LnDrawSpacer/>            
             {takeLast(supp,draw.numbers).map((n) => {
                 return (<_lnNumber supp key={`${draw.drawid}${n}`}>{n}</_lnNumber>)
             })}
@@ -103,6 +100,17 @@ const LnDraw = (props) =>  {
     //console.log('LnDraw: ', props.details);
     //console.log('LnDraw: ', props.details.draws.length);
     const { gamedata } = props.data;
+    const store = useLnStore();
+
+    const onSelectDraw = (e) => {
+
+        e.preventDefault();
+        console.log('LNDRAW: ', e.target.outerText);
+        store.setSelectedDraw(e.target.outerText);
+
+        //console.log('LNDRAW: ', id);
+    }
+
 
     return (
         
@@ -110,10 +118,12 @@ const LnDraw = (props) =>  {
             <Typography component="div">
                 {Object.values(gamedata.draws).map((d) => {    
                     return (                    
-                        <LnDrawNumbers  key={d.drawid} 
-                                        draw={d} 
-                                        std={gamedata.standardnumbers} 
-                                        supp={gamedata.supplementary}/>
+                        <LnDrawNumbers key={d.drawid}
+                            draw={d}
+                            std={gamedata.standardnumbers}
+                            supp={gamedata.supplementary}
+                            onDrawClick={onSelectDraw}/>
+                        
                     )
                 })}
             </Typography>

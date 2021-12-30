@@ -19,8 +19,6 @@ import { useLnStore, dataApi } from './store/lnstore';
 import HomePage from './pages/home';
 import GamePage from './pages/game';
 
-//import { AnotherTitle } from './components/anothertitle';
-
 const OuterContainer = styled(Box)`
     display: flex;
     flex-direction: column;

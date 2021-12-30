@@ -28,12 +28,14 @@ type CmdArgs struct {
 	RapiKey      string
 	RapiURL      string
 	DataURL      string
+	StaticDir    string
+	JwtKey       string
 }
 
 //Game structure including list of draws
 type game struct {
 	Name             string       `json:"name"`
-	DataURL          string       `json:"dataurl"`
+	DataURL          string       `json:"dataurl,omitempty"`
 	StandardNumbers  int          `json:"standardnumbers"`
 	Supplementary    int          `json:"supplementary"`
 	MaxNumber        int          `json:"maxnumber"`
@@ -113,73 +115,19 @@ type drawInfo struct {
 
 var _games map[string]game
 
-//var _draws map[int]draw
-
 //InitGames => Initialise games from online data
-func InitGames(dataDir string, url string, args CmdArgs) error {
+func InitGames(dataDir string, args CmdArgs) error {
 
 	var e error
 	//const op lottoerrors.Operation = "models:initgames"
 
-	fmt.Println("Initialising Games...")
+	fmt.Println("Initialising Game data...")
 	e = nil
-
-	_games = make(map[string]game)
-
-	_games["oz-lotto"] = game{
-		Name:             "oz-lotto",
-		StandardNumbers:  7,
-		Supplementary:    2,
-		MaxNumber:        45,
-		MaxSupplementary: 45,
-		Format:           "csv",
-		DrawOffset:       1,
-		Order:            4}
-
-	_games["powerball"] = game{
-		Name:             "powerball",
-		StandardNumbers:  7,
-		Supplementary:    1,
-		MaxNumber:        35,
-		MaxSupplementary: 20,
-		Format:           "csv",
-		DrawOffset:       1,
-		Order:            5}
-
-	_games["saturday-lotto"] = game{
-		Name:             "saturday-lotto",
-		StandardNumbers:  6,
-		Supplementary:    2,
-		MaxNumber:        45,
-		MaxSupplementary: 45,
-		Format:           "csv",
-		DrawOffset:       2,
-		Order:            3}
-
-	_games["monday-lotto"] = game{
-		Name:             "monday-lotto",
-		StandardNumbers:  6,
-		Supplementary:    2,
-		MaxNumber:        45,
-		MaxSupplementary: 45,
-		Format:           "csv",
-		DrawOffset:       2,
-		Order:            1}
-
-	_games["wednesday-lotto"] = game{
-		Name:             "wednesday-lotto",
-		StandardNumbers:  6,
-		Supplementary:    2,
-		MaxNumber:        45,
-		MaxSupplementary: 45,
-		Format:           "csv",
-		DrawOffset:       2,
-		Order:            3}
 
 	wg := waitgroup.NewWaitGroup(10)
 
 	//Get the HTML from site
-	resp, err := http.Get(url)
+	resp, err := http.Get(args.DataURL)
 
 	if err != nil {
 		log.Fatal(err)
@@ -194,7 +142,7 @@ func InitGames(dataDir string, url string, args CmdArgs) error {
 
 	//Parse HTML and extract data urls
 	//_games, err = extractDataURL(_games, resp.Body)
-	err = extractDataURL(_games, resp.Body)
+	err = setDataURL(_games, resp.Body)
 
 	if err != nil {
 		return err
@@ -258,6 +206,10 @@ func InitGames(dataDir string, url string, args CmdArgs) error {
 
 func GetGames() map[string]game {
 	return _games
+}
+
+func SetGames(games map[string]game) {
+	_games = games
 }
 
 func GetGamesInfo() []game {

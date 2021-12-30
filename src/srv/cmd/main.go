@@ -8,13 +8,14 @@ import (
 	"path/filepath"
 	"syscall"
 
-	"github.com/gorilla/mux"
 	"github.com/src/srv/models"
 	"github.com/src/srv/webserver"
 )
 
 const drawDataURL = "https://www.lotterywest.wa.gov.au/results/frequency-charts/?soccerpoolsx"
 const randomAPIURL = "https://api.random.org/json-rpc/2/invoke"
+const staticDir = "C://gitrepos//playground//goprojects//lottonew//build"
+const JwtKey = "jwtkey"
 
 //Parse command line switches
 func getArgs() models.CmdArgs {
@@ -24,12 +25,14 @@ func getArgs() models.CmdArgs {
 	flag.StringVar(&args.Game, "game", "oz-lotto", "Game to generate numbers for.")
 	flag.StringVar(&args.GameType, "type", "standard", "Standard, System7, System8,...")
 	flag.IntVar(&args.DrawOffset, "offset", 1, "Numbers of draws to go back to from highest draw.")
-	flag.IntVar(&args.Draws, "draws", 7, "Draws to evaluate from starting draw.")
+	flag.IntVar(&args.Draws, "draws", 8, "Draws to evaluate from starting draw.")
 	flag.BoolVar(&args.UseWebUI, "webui", false, "Load the WebUI using the default browser. Also starts the web server.")
 	flag.BoolVar(&args.UseWebserver, "web", false, "Run a webserver to serve the webui.")
 	flag.IntVar(&args.Port, "port", 1337, "Specify Port to be used by web server.")
 	flag.StringVar(&args.RapiKey, "apikey", "", "Api key for random number web service")
 	flag.StringVar(&args.DataURL, "dataurl", drawDataURL, "URL for historic draw info")
+	flag.StringVar(&args.StaticDir, "staticdir", staticDir, "Directory of static content")
+	flag.StringVar(&args.JwtKey, "jwtkey", JwtKey, "JWT Token Key")
 
 	flag.Parse()
 
@@ -82,18 +85,16 @@ func run() error {
 	}
 
 	//Read and process most current data from website
-	err = models.InitGames(fmt.Sprintf("%s/data", rootDir), drawDataURL, args)
+	//data, err := GetData(fmt.Sprintf("%s/data", rootDir, drawDataURL, args)
+	models.SetGames(models.ConfigureGames())
+	err = models.InitGames(fmt.Sprintf("%s/data", rootDir), args)
 	if err != nil {
 		return err //log.Fatal(err)
 	}
 
 	ctx := webserver.ServerContext{
-		Router:             mux.NewRouter(),
+		Args:               args,
 		RandomNumberAPIURL: randomAPIURL,
-		RandomNumberAPIKEY: args.RapiKey,
-		WebServer:          args.UseWebserver,
-		WebUI:              args.UseWebUI,
-		Port:               args.Port,
 		Cwd:                cwd,
 		RootDir:            rootDir,
 	}
