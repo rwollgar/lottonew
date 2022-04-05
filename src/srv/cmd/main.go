@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
+	"strconv"
 	"syscall"
 
 	"github.com/src/srv/models"
@@ -15,12 +16,15 @@ import (
 const drawDataURL = "https://www.lotterywest.wa.gov.au/results/frequency-charts/?soccerpoolsx"
 const randomAPIURL = "https://api.random.org/json-rpc/2/invoke"
 const staticDir = "C://gitrepos//playground//goprojects//lottonew//build"
-const JwtKey = "jwtkey"
 
 //Parse command line switches
 func getArgs() models.CmdArgs {
 
 	args := models.CmdArgs{}
+	port, err := strconv.ParseInt(os.Getenv("WEBSERVERPORT"), 10, 32)
+	if err != nil {
+		port = 1337
+	}
 
 	flag.StringVar(&args.Game, "game", "oz-lotto", "Game to generate numbers for.")
 	flag.StringVar(&args.GameType, "type", "standard", "Standard, System7, System8,...")
@@ -28,11 +32,12 @@ func getArgs() models.CmdArgs {
 	flag.IntVar(&args.Draws, "draws", 8, "Draws to evaluate from starting draw.")
 	flag.BoolVar(&args.UseWebUI, "webui", false, "Load the WebUI using the default browser. Also starts the web server.")
 	flag.BoolVar(&args.UseWebserver, "web", false, "Run a webserver to serve the webui.")
-	flag.IntVar(&args.Port, "port", 1337, "Specify Port to be used by web server.")
-	flag.StringVar(&args.RapiKey, "apikey", "", "Api key for random number web service")
+	flag.IntVar(&args.Port, "port", int(port), "Specify Port to be used by web server.")
+	flag.StringVar(&args.RapiKey, "rapikey", os.Getenv("RAPIKEY"), "Api key for random number web service")
+	flag.StringVar(&args.RapiURL, "rapiurl", os.Getenv("RAPIURL"), "Api Url for random number web service")
 	flag.StringVar(&args.DataURL, "dataurl", drawDataURL, "URL for historic draw info")
 	flag.StringVar(&args.StaticDir, "staticdir", staticDir, "Directory of static content")
-	flag.StringVar(&args.JwtKey, "jwtkey", JwtKey, "JWT Token Key")
+	flag.StringVar(&args.JwtKey, "jwtkey", os.Getenv("JWTKEY"), "JWT Token Key")
 
 	flag.Parse()
 

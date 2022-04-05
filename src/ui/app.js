@@ -1,5 +1,6 @@
 import React, {useEffect} from "react";
-import ReactDOM from 'react-dom';
+//import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { Outlet, ReactLocation, Router } from "react-location";
 //import { ReactLocationDevtools } from 'react-location-devtools';
 import useAsyncEffect from 'use-async-effect';
@@ -121,12 +122,12 @@ const routes = [
 
 const App = (props) => {
 
-    const store = useLnStore();
+    //const store = useLnStore();
 
-    useAsyncEffect(async () => {
-        console.log('App: Hello from useEffect');
-        await store.initStore();
-    }, []);
+    // useAsyncEffect(async () => {
+    //     console.log('App: Hello from useEffect');
+    //     await store.initStore();
+    // }, []);
 
     return (
         <Router routes={routes} location={location}>
@@ -146,7 +147,23 @@ const App = (props) => {
     )
 }
 
-ReactDOM.render(<App />, document.getElementById('root'));
+//ReactDOM.render(<App />, document.getElementById('root'));
+
+//const container = document.getElementById('root');
+const AppBoot = (props) => {
+
+    const store = useLnStore();
+
+    useAsyncEffect(async () => {
+        await store.initStore();
+        console.log('APPBOOT: Lotto App rendered.');
+    },[]);
+
+    return (<App/>)
+}
+
+const root = createRoot(document.getElementById('root'));
+root.render(<AppBoot/>);
 
 // if (module.hot) {
 //     module.hot.accept('./app', () => {

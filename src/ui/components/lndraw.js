@@ -70,7 +70,8 @@ const LnDrawId = (props) => {
 
 const LnDrawNumbers = (props) => {
 
-    const {draw, std, supp} = props;
+    const { draw, std, supp } = props;
+    let dummy = 0;
 
     return (
         
@@ -83,7 +84,7 @@ const LnDrawNumbers = (props) => {
                 if(n === 0) {
                     return (<_lnNumber key={`${draw.drawid}${++dummy}`} missing>{''}</_lnNumber>)
                 } else {
-                    return (<_lnNumber key={`${draw.drawid}${n}`}>{n}</_lnNumber>)
+                    return (<_lnNumber key={`${draw.drawid}${++dummy}`}>{n}</_lnNumber>)
                 }
             })}
             <LnDrawSpacer/>            

@@ -1,12 +1,19 @@
 package models
 
 import (
+	"bytes"
 	"encoding/csv"
+	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"math"
+	"math/rand"
+	"net/http"
+	"strconv"
 	"strings"
+	"time"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/src/srv/lottoerrors"
@@ -144,11 +151,50 @@ func getData(g *game, body io.ReadCloser) error {
 
 }
 
-func generateBuckets(startDraw draw, numberOfDraws int, g game) *drawInfo {
+func initDraw(d draw, record []string) draw {
+
+	arlen := d.Game.StandardNumbers + d.Game.Supplementary
+	d.Numbers = make([]float64, arlen)
+
+	drawID, err := strconv.Atoi(record[0])
+
+	if err != nil {
+		d.DrawID = 0
+	}
+
+	d.DrawID = drawID
+	d.Date, err = time.Parse("02/01/2006", record[1])
+	yr, wk := d.Date.ISOWeek()
+	m := d.Date.Month()
+	d.YearDay = d.Date.YearDay()
+	d.Week = wk
+	d.Month = int(m)
+	d.Quarter = int(math.Floor(float64(d.Month-1)/3)) + 1
+	d.Year = yr
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	var num float64
+
+	offset := 2
+	for i := 0; i < arlen; i++ {
+		num, _ = strconv.ParseFloat(record[i+offset], 64)
+		d.Numbers[i] = num
+	}
+
+	d.drawMetrics()
+
+	return d
+}
+
+//func generateBuckets(g game, startDraw draw, numberOfDraws int) *drawInfo {
+func generateBuckets(startDraw *draw, numberOfDraws int) *drawInfo {
 
 	var di drawInfo
 
-	di.Game = g.Name
+	g := startDraw.Game //.Game = g.Name
 	di.MaxNumber = g.MaxNumber
 	di.MaxNumbers = g.StandardNumbers + g.MaxSupplementary
 	di.DrawID = startDraw.DrawID
@@ -214,15 +260,13 @@ func generateBuckets(startDraw draw, numberOfDraws int, g game) *drawInfo {
 		}
 	}
 
-	//di.Metrics = di.getMetrics()
 	di.uniqueMetrics()
 	di.missingMetrics()
-	//di.Metrics.Ranges = getNumberRanges(di.Unique, g.MaxNumber)
 
 	return &di
 }
 
-func generateMetrics(numbers []float64, supplements int) *drawMetrics {
+func generateMetrics(numbers []float64, supplements int) drawMetrics {
 
 	var m drawMetrics
 
@@ -243,7 +287,7 @@ func generateMetrics(numbers []float64, supplements int) *drawMetrics {
 	m.Avg = math.Round((float64(sum)/float64(stdLength))*100) / 100
 	m.AvgSupp = math.Round((float64(sumsupp)/float64(len(numbers)))*100) / 100
 
-	return &m
+	return m
 }
 
 func getNumberRanges(numbers []float64, maxNum int) map[string]numberRange {
@@ -285,4 +329,71 @@ func getNumberRanges(numbers []float64, maxNum int) map[string]numberRange {
 	}
 
 	return r
+}
+
+func getRandomNumbers(d draw, apikey string, url string) []int {
+
+	var randomNumbers = make([]int, d.Game.StandardNumbers+d.Game.Supplementary)
+
+	_ = randomNumbers
+
+	if apikey != "" {
+
+		r := &randomRequest{
+			Method:  "generateIntegers",
+			ID:      1,
+			Version: "2.0",
+			Params: randomApiParams{
+				APIKey:      apikey,
+				N:           d.Game.StandardNumbers + d.Game.Supplementary,
+				Min:         1,
+				Max:         d.Game.MaxNumber,
+				Replacement: true}}
+
+		b, err := json.Marshal(r)
+		_ = err
+		req, err := http.NewRequest("POST", url, bytes.NewBuffer([]byte(b)))
+
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		req.Header.Set("Content-Type", "application/json")
+
+		client := &http.Client{}
+		resp, err := client.Do(req)
+		_ = err
+
+		defer resp.Body.Close()
+
+		fmt.Println("response Status:", resp.Status)
+		fmt.Println("response Headers:", resp.Header)
+		body, _ := ioutil.ReadAll(resp.Body)
+		fmt.Println("\n\n\nresponse Body:", string(body))
+
+		var data randomApiResponse
+		if err := json.Unmarshal(body, &data); err != nil {
+			fmt.Println("failed to unmarshal:", err)
+		} else {
+			fmt.Println(data)
+			fmt.Printf("%s %s\n\n", d.Game.Name, data.Jsonrpc)
+			fmt.Printf("%s %v", d.Game.Name, data.Result.Random.Data)
+
+		}
+
+	} else {
+
+		rand.Seed(time.Now().UTC().UnixNano())
+
+		n1 := rand.Intn(d.Game.MaxNumber)
+		n2 := rand.Intn(d.Game.MaxNumber)
+		n3 := rand.Intn(d.Game.MaxNumber)
+
+		fmt.Printf("Random Number: %d\n", n1)
+		fmt.Printf("Random Number: %d\n", n2)
+		fmt.Printf("Random Number: %d\n", n3)
+
+	}
+
+	return randomNumbers
 }

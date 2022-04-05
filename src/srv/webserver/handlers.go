@@ -59,18 +59,30 @@ func (s ServerContext) getDrawsForGame(c echo.Context) error {
 
 func (s ServerContext) getMetrics(c echo.Context) error {
 
-	g := c.Param("game")
-	_ = g
+	g, ok := models.GetGames()[c.Param("game")]
 
-	draw, err := strconv.Atoi(c.Param("draw"))
-	_ = draw
-
-	if err != nil {
-		return echo.NewHTTPError(http.StatusNotFound, fmt.Sprintf("Error: Invalid draw <%s> not found.", c.Param("draw")))
+	if !ok {
+		return echo.NewHTTPError(http.StatusNotFound, fmt.Sprintf("Error: Game <%s> not found.", c.Param("game")))
 	}
 
-	fmt.Println("handleGetDrawsForGame")
+	draw, err := strconv.Atoi(c.Param("draw"))
 
-	return c.String(http.StatusOK, "OK")
+	if err != nil {
+		//get most recent draw for game
+		draw = g.LastDraw.DrawID
+	}
+
+	draws, err := strconv.Atoi(c.Param("draws"))
+	if err != nil {
+		draws = 8 //default tp 8 draws
+	}
+
+	// if err != nil {
+	// 	return echo.NewHTTPError(http.StatusNotFound, fmt.Sprintf("Error: Draw <%s> not found.", c.Param("draw")))
+	// }
+
+	fmt.Printf("handlegetMetrics game: %s, draw: %d, draws: %d", g.Name, draw, draws)
+
+	return c.String(http.StatusOK, fmt.Sprintf("OK. handlegetMetrics game: %s, draw: %d, draws: %d\n", g.Name, draw, draws))
 
 }

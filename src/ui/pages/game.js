@@ -3,7 +3,6 @@ import React from 'react';
 import {Paper, Box, Divider} from '@mui/material';
 import styled from '@emotion/styled';
 // import ReactJson from 'react-json-view'
-//import V from 'voca';
 import { useMatch } from "react-location";
 
 import LnDraw from '../components/lndraw';

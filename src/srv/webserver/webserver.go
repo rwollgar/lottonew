@@ -54,7 +54,10 @@ func (s *ServerContext) InitWebserver() error {
 		g.GET("games/:game", s.getGames)
 		g.GET("games/:game/draws", s.getDrawsForGame)
 		g.GET("games/:game/draws/:draw", s.getDrawsForGame)
-		g.GET("games/:game/:draw/drawmetrics", s.getMetrics)
+
+		g.GET("metrics/:game/:draw/:draws", s.getMetrics)
+		g.GET("metrics/:game/:draw", s.getMetrics)
+		g.GET("metrics/:game", s.getMetrics)
 
 		serverURL := fmt.Sprintf("localhost:%d", s.Args.Port)
 		browserURL := fmt.Sprintf("http://localhost:%d/web", s.Args.Port)
