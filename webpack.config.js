@@ -219,8 +219,12 @@ module.exports = (env, args) => {
                     contentBase: 'public'
                 }
             },
+            headers: {
+                'Access-Control-Allow-Origin': '*'
+            },            
             hot: true,
-            historyApiFallback: true
+            historyApiFallback: true,
+            compress: true
         }
     }
 }

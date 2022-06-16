@@ -65,10 +65,12 @@ const useLnStore = createStore((set) => ({
             const data = await dataApi.getGames();
             set(() => ({
                 initialised: true, 
+                lastError: null,
                 data: data.sort((a,b) => {return a.order - b.order;})
             }))
         } catch (error) {
             console.log(error);
+            set(() => ({lastError: error.message}))
         }
     }),
 

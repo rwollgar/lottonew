@@ -12,6 +12,13 @@
             "program": "${workspaceFolder}/src/srv/cmd/main.go",
             "envFile":"${workspaceFolder}/.env",
             "args": ["--web", "--game=powerball"]
-        }
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Debug Launch Chrome on localhost",
+            "url": "http://localhost:8088"
+        }        
+
     ]
 }

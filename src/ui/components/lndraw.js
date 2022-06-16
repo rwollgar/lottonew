@@ -1,6 +1,6 @@
 import React from 'react';
-import m from 'moment';
 import {take, takeLast} from 'ramda';
+import {Virtuoso} from 'react-virtuoso';
 
 import {Typography, Button} from '@mui/material';
 
@@ -17,9 +17,10 @@ const LnDraws = styled.div`
     background-color: inherit;
     max-width: 460px;
     overflow-x : hidden;
-    overflow-y: scroll;
+    overflow-y: auto;
     border: solid lightgrey 2px;
     border-radius: 5px;
+    height: 100%;
 `
 //(Container)
 const _lnDrawContainer = styled.div`
@@ -101,6 +102,8 @@ const LnDraw = (props) =>  {
     //console.log('LnDraw: ', props.details);
     //console.log('LnDraw: ', props.details.draws.length);
     const { gamedata } = props.data;
+    const draws = Object.values(gamedata.draws);
+
     const store = useLnStore();
 
     const onSelectDraw = (e) => {
@@ -112,24 +115,63 @@ const LnDraw = (props) =>  {
         //console.log('LNDRAW: ', id);
     }
 
-
     return (
-        
         <LnDraws id="draws">
             <Typography component="div">
-                {Object.values(gamedata.draws).map((d) => {    
-                    return (                    
-                        <LnDrawNumbers key={d.drawid}
-                            draw={d}
-                            std={gamedata.standardnumbers}
-                            supp={gamedata.supplementary}
-                            onDrawClick={onSelectDraw}/>
-                        
-                    )
-                })}
+                
+                <Virtuoso
+                    overscan={20}
+                    scrollSeekConfiguration={false}
+                    fixedItemHeight={45}
+                    data={draws}
+                    itemContent={(index, d) => {
+                        return (
+                            <LnDrawNumbers key={d.drawid}
+                                draw={d}
+                                std={gamedata.standardnumbers}
+                                supp={gamedata.supplementary}
+                                onDrawClick={onSelectDraw}/>
+                        )
+                    }}/>
+
             </Typography>
         </LnDraws>
+
     )
+
+//     return (
+        
+//         <LnDraws id="draws">
+//             <Typography component="div">
+//                 {draws.map((d) => {    
+//                     return (                    
+//                         <LnDrawNumbers key={d.drawid}
+//                             draw={d}
+//                             std={gamedata.standardnumbers}
+//                             supp={gamedata.supplementary}
+//                             onDrawClick={onSelectDraw}/>
+//                     )
+//                 })}
+//             </Typography>
+//         </LnDraws>
+//     )
 }
 
 export default LnDraw;
+
+
+/*
+                    <Virtuoso
+                        overscan={10}
+                        data={this.state.results}
+                        itemContent={(index, r) => {
+                            return (
+                                <BaSearchResult key={r.gigya_id} 
+                                                record={r} 
+                                                classes={this.props.classes} 
+                                                onClick={this._createClickHandler(r.gigya_id, r.email)}/>
+                            )
+                        }}
+                    />
+
+*/

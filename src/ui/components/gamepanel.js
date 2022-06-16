@@ -1,9 +1,9 @@
 import React from 'react';
-import m from 'moment';
+import m from 'dayjs';
 import styled from '@emotion/styled';
 
 import {Box, CardHeader, CardMedia, Divider, Typography} from '@mui/material';
-import {Link} from 'react-location';
+import {Link} from '@tanstack/react-location';
 
 import hlp from '../../utils/helpers';
 
@@ -149,11 +149,11 @@ const LnGamePanel = (props) => {
                     {/* <LnDivider/> */}
                     <LnContentItem>
                         <LnLabel>Last draw</LnLabel>
-                        <LnValue><b>{`${m(game.lastdraw.date).format('ddd, MMM Do YYYY')}`}</b></LnValue>
+                        <LnValue><b>{`${m(game.lastdraw.date).format('ddd, D MMM YYYY')}`}</b></LnValue>
                     </LnContentItem>
                     <LnContentItem>
                         <LnLabel>Next draw</LnLabel>
-                        <LnValue><b>{`${m(game.lastdraw.date).add(7, 'day').format('ddd, MMM Do YYYY')}`}</b></LnValue>
+                        <LnValue><b>{`${m(game.lastdraw.date).add(7, 'day').format('ddd, D MMM YYYY')}`}</b></LnValue>
                     </LnContentItem>
                     <LnContentItem>
                         <LnLabel>Draws</LnLabel>
