@@ -18,6 +18,12 @@
             "request": "launch",
             "name": "Debug Launch Chrome on localhost",
             "url": "http://localhost:8088"
+        },        
+        {
+            "type": "pwa-msedge",
+            "request": "launch",
+            "name": "Debug Launch Edge on localhost",
+            "url": "http://localhost:8088"
         }        
 
     ]
