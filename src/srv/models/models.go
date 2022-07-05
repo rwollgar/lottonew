@@ -30,6 +30,7 @@ type CmdArgs struct {
 //Game structure including list of draws
 type game struct {
 	Name             string       `json:"name"`
+	GameID           string       `JSON:"gameid"`
 	DataURL          string       `json:"dataurl,omitempty"`
 	StandardNumbers  int          `json:"standardnumbers"`
 	Supplementary    int          `json:"supplementary"`
@@ -138,13 +139,15 @@ func InitGames(dataDir string, args CmdArgs) error {
 	wg := waitgroup.NewWaitGroup(10)
 
 	//Get the HTML from site
-	resp, err := http.Get(args.DataURL)
+	// fmt.Printf(args.DataURL)
 
-	if err != nil {
-		log.Fatal(err)
-	}
+	// resp, err := http.Get(args.DataURL)
 
-	defer resp.Body.Close()
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+
+	//defer resp.Body.Close()
 
 	// document, err := goquery.NewDocumentFromReader(resp.Body)
 	// if err != nil {
@@ -153,11 +156,11 @@ func InitGames(dataDir string, args CmdArgs) error {
 
 	//Parse HTML and extract data urls
 	//_games, err = extractDataURL(_games, resp.Body)
-	err = setDataURL(_games, resp.Body)
+	//err = setDataURL(_games, resp.Body)
 
-	if err != nil {
-		return err
-	}
+	//if err != nil {
+	//	return err
+	//}
 
 	for ix, g := range _games {
 
@@ -167,6 +170,7 @@ func InitGames(dataDir string, args CmdArgs) error {
 
 			defer wg.Done()
 
+			fmt.Println(g.DataURL)
 			resp, err := http.Get(g.DataURL)
 
 			if err != nil {

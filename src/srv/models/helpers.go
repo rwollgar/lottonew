@@ -12,11 +12,7 @@ import (
 	"math/rand"
 	"net/http"
 	"strconv"
-	"strings"
 	"time"
-
-	"github.com/PuerkitoBio/goquery"
-	"github.com/src/srv/lottoerrors"
 )
 
 func ConfigureGames() map[string]game {
@@ -25,6 +21,8 @@ func ConfigureGames() map[string]game {
 
 	games["oz-lotto"] = game{
 		Name:             "oz-lotto",
+		GameID:           "5130",
+		DataURL:          "https://api.lotterywest.wa.gov.au/api/v1/games/5130/results-csv",
 		StandardNumbers:  7,
 		Supplementary:    2,
 		MaxNumber:        45,
@@ -35,6 +33,8 @@ func ConfigureGames() map[string]game {
 
 	games["powerball"] = game{
 		Name:             "powerball",
+		GameID:           "5132",
+		DataURL:          "https://api.lotterywest.wa.gov.au/api/v1/games/5132/results-csv",
 		StandardNumbers:  7,
 		Supplementary:    1,
 		MaxNumber:        35,
@@ -45,6 +45,8 @@ func ConfigureGames() map[string]game {
 
 	games["saturday-lotto"] = game{
 		Name:             "saturday-lotto",
+		GameID:           "5127",
+		DataURL:          "https://api.lotterywest.wa.gov.au/api/v1/games/5127/results-csv",
 		StandardNumbers:  6,
 		Supplementary:    2,
 		MaxNumber:        45,
@@ -55,6 +57,8 @@ func ConfigureGames() map[string]game {
 
 	games["monday-lotto"] = game{
 		Name:             "monday-lotto",
+		GameID:           "5128",
+		DataURL:          "https://api.lotterywest.wa.gov.au/api/v1/games/5128/results-csv",
 		StandardNumbers:  6,
 		Supplementary:    2,
 		MaxNumber:        45,
@@ -65,6 +69,8 @@ func ConfigureGames() map[string]game {
 
 	games["wednesday-lotto"] = game{
 		Name:             "wednesday-lotto",
+		GameID:           "5129",
+		DataURL:          "https://api.lotterywest.wa.gov.au/api/v1/games/5129/results-csv",
 		StandardNumbers:  6,
 		Supplementary:    2,
 		MaxNumber:        45,
@@ -77,35 +83,35 @@ func ConfigureGames() map[string]game {
 }
 
 //func extractDataURL(games map[string]game, body io.ReadCloser) (map[string]game, error) {
-func setDataURL(games map[string]game, body io.ReadCloser) error {
+// func setDataURL(games map[string]game, body io.ReadCloser) error {
 
-	const op lottoerrors.Operation = "helpers:extractDataURL"
+// 	const op lottoerrors.Operation = "helpers:extractDataURL"
 
-	doc, err := goquery.NewDocumentFromReader(body)
+// 	doc, err := goquery.NewDocumentFromReader(body)
 
-	if err != nil {
-		return lottoerrors.E(err, lottoerrors.Severity4, lottoerrors.Category3, op, "Error reading document")
-	}
+// 	if err != nil {
+// 		return lottoerrors.E(err, lottoerrors.Severity4, lottoerrors.Category3, op, "Error reading document")
+// 	}
 
-	doc.Find(".lw-freqchart-list").Children().Each(func(i int, item *goquery.Selection) {
+// 	doc.Find(".lw-freqchart-list").Children().Each(func(i int, item *goquery.Selection) {
 
-		href, exists := item.Find("a").Attr("href")
+// 		href, exists := item.Find("a").Attr("href")
 
-		if exists {
-			href = strings.ToLower(href)
-			for k, g := range games {
-				if strings.Contains(href, g.Name) {
-					fmt.Println(href)
-					g.DataURL = href
-					games[k] = g
-				}
-			}
-		}
+// 		if exists {
+// 			href = strings.ToLower(href)
+// 			for k, g := range games {
+// 				if strings.Contains(href, g.GameID) {
+// 					fmt.Println(href)
+// 					g.DataURL = href
+// 					games[k] = g
+// 				}
+// 			}
+// 		}
 
-	})
+// 	})
 
-	return nil
-}
+// 	return nil
+// }
 
 func getData(g *game, body io.ReadCloser) error {
 
