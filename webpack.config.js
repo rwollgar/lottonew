@@ -101,12 +101,11 @@ module.exports = (env, args) => {
         hashFunction: 'xxhash64',
         filename: '[name].js',
         path: outputDir,
-        //publicPath: buildMode === 'DEVELOPMENT' ? webPathDev : webPath,
         clean: true
     }
 
     if (buildMode === 'DEVELOPMENT') {
-        output.publicPath = devPublicPath; //'http://localhost:8088/';
+        output.publicPath = devPublicPath;
     }
 
     console.log('Output ==> ', output);
@@ -115,29 +114,14 @@ module.exports = (env, args) => {
 
         target: 'web',
 
-        performance: {hints: false},
+        performance: { hints: false },
 
-        // optimization: {
-        //     splitChunks: {
-        //         cacheGroups: {
-        //             default: false
-        //         }
-        //     }
-        // },
         // entry point for app
         entry: {
             'appmain':[`${srcDir}/app.js`]
         },
 
         output: output,
-        // output: {
-        //     hashFunction: "xxhash64",
-        //     filename: '[name].js',
-        //     path: outputDir,
-        //     publicPath: devPublicPath, //'http://localhost:8088/',
-        //     //publicPath: buildMode === 'DEVELOPMENT' ? webPathDev : webPath,
-        //     clean: true
-        // },
 
         optimization: {
             minimize: buildMode === 'PRODUCTION'
@@ -147,20 +131,35 @@ module.exports = (env, args) => {
             rules:
             [
                 {
-                    test: /\.(js|jsx)$/,
-                    include: __dirname, //[path.resolve(__dirname, 'src')],
+                    test: /\.(js|jsx|ts|tsx)$/,
+                    include: __dirname,
                     exclude: [path.resolve(__dirname, 'node_modules')],
-                    use: {
-                        loader: 'babel-loader',
-                        options: {
-                            plugins: [buildMode === 'DEVELOPMENT' && require.resolve('react-refresh/babel')].filter(Boolean)
-                        }
-                    }
-                    // use:{ loader: 'swc-loader' }
+                    use: { loader: 'babel-loader' }
+                    //     options: {
+                    //         plugins: [buildMode === 'DEVELOPMENT' && require.resolve('react-refresh/babel')].filter(Boolean)
+                    //     }
+                    // }
+                    //use:{ loader: 'swc-loader' }
                 },
+                // {
+                //     test: /\.(m?js|jsx)$/,
+                //     exclude: /(node_modules)/,
+                //     use: {
+                //       // `.swcrc` can be used to configure swc
+                //       loader: "swc-loader"
+                //     }
+                // },                
+                // {
+                //     test: /\.js$/,
+                //     loader: 'esbuild-loader',
+                //     options: {
+                //         loader: 'jsx',  // Remove this if you're not using JSX
+                //         target: 'es2015'  // Syntax to compile to (see options below for possible values)
+                //     }
+                // },                                    
                 {
                     test: /\.(ts|tsx)$/,
-                    include: __dirname, //[path.resolve(__dirname, 'src')],
+                    include: __dirname,
                     exclude: [path.resolve(__dirname, 'node_modules')],
                     use:{
                         loader: 'babel-loader',
