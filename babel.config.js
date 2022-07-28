@@ -19,13 +19,13 @@ module.exports = (api) => {
         ],
         "plugins": [
             "jsx-control-statements",
-            "dynamic-import-node",
-            "@babel/plugin-syntax-import-meta",
-            ["@babel/plugin-proposal-decorators", {"legacy": true}],
-            ["@babel/plugin-proposal-class-properties"],
+            // "dynamic-import-node",
+            // "@babel/plugin-syntax-import-meta",
+            // ["@babel/plugin-proposal-decorators", {"legacy": true}],
+            // ["@babel/plugin-proposal-class-properties"],
             "@babel/plugin-transform-react-jsx",
-            "@babel/plugin-proposal-export-namespace-from",
-            "@babel/plugin-proposal-export-default-from",
+            // "@babel/plugin-proposal-export-namespace-from",
+            // "@babel/plugin-proposal-export-default-from",
             [
                 "@emotion",
                 {
