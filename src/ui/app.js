@@ -178,13 +178,13 @@ const App = (props) => {
                 <LnLayout id="layout" error={store.lastError}>
                     <Outlet />
 
-                    <Bill>
+                    {/* <Bill>
                         <BillHeader>HEADER</BillHeader>
                         <BillBody>
                             <BillBodyLabel>LABEL</BillBodyLabel>
                             <BillBodyValue>VALUE</BillBodyValue>
                         </BillBody>
-                    </Bill>
+                    </Bill> */}
 
                 </LnLayout>
                 
@@ -216,10 +216,10 @@ const AppBoot = (props) => {
 const root = createRoot(document.getElementById('root'));
 root.render(<AppBoot/>);
 
-if (module.hot) {
-    module.hot.accept();
-    console.log("MODULE.HOT");
-}
+// if (module.hot) {
+//     module.hot.accept();
+//     console.log("MODULE.HOT");
+// }
 // if (module.hot) {
 //     module.hot.accept('./app', () => {
 //         const NextApp = require('./app').default; // Get the updated code
