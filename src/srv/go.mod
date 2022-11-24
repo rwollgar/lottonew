@@ -3,7 +3,6 @@ module github.com/src/srv
 go 1.18
 
 require (
-	github.com/PuerkitoBio/goquery v1.6.1
 	github.com/labstack/echo/v4 v4.6.1
 	github.com/onsi/ginkgo v1.16.5
 	github.com/onsi/gomega v1.10.5
@@ -12,7 +11,6 @@ require (
 )
 
 require (
-	github.com/andybalholm/cascadia v1.2.0 // indirect
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/labstack/gommon v0.3.0 // indirect
