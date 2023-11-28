@@ -11,7 +11,7 @@ import (
 	"github.com/pieterclaerhout/go-waitgroup"
 )
 
-//CmdArgs => command line arguments
+// CmdArgs => command line arguments
 type CmdArgs struct {
 	Game         string
 	GameType     string
@@ -27,7 +27,7 @@ type CmdArgs struct {
 	JwtKey       string
 }
 
-//Game structure including list of draws
+// Game structure including list of draws
 type game struct {
 	Name             string       `json:"name"`
 	GameID           string       `JSON:"gameid"`
@@ -44,7 +44,7 @@ type game struct {
 	LastDraw         draw         `json:"lastdraw"`
 }
 
-//NumberRange => store number range
+// NumberRange => store number range
 type numberRange struct {
 	Name    string    `json:"name"`
 	Start   int       `json:"start"`
@@ -52,7 +52,7 @@ type numberRange struct {
 	Numbers []float64 `json:"numbers"`
 }
 
-//Draw struct
+// Draw struct
 type draw struct {
 	ID      int         `json:"id"`
 	DrawID  int         `json:"drawid"`
@@ -68,7 +68,7 @@ type draw struct {
 	Game    *game       `json:"-"` //Don't export to JSON
 }
 
-//DrawInfo struct for saving draw details
+// DrawInfo struct for saving draw details
 type drawInfo struct {
 	ID             int          `json:"id"`
 	MaxNumber      int          `json:"maxnumber"`
@@ -84,7 +84,7 @@ type drawInfo struct {
 	MissingMetrics drawMetrics  `json:"missingmetrics,omitempty"`
 }
 
-//DrawMetrics struct
+// DrawMetrics struct
 type drawMetrics struct {
 	CrossSum     float64                `json:"crosssum"`
 	Avg          float64                `json:"average"`
@@ -93,7 +93,7 @@ type drawMetrics struct {
 	Ranges       map[string]numberRange `json:"ranges"`
 }
 
-//RandomRequest struct used by radmon number service
+// RandomRequest struct used by radmon number service
 type randomRequest struct {
 	Version string          `json:"jsonrpc"`
 	Method  string          `json:"method"`
@@ -101,7 +101,7 @@ type randomRequest struct {
 	Params  randomApiParams `json:"params"`
 }
 
-//RandomParams struct
+// RandomParams struct
 type randomApiParams struct {
 	APIKey      string `json:"apiKey"`
 	N           int    `json:"n"`
@@ -127,7 +127,7 @@ type randomApiResponse struct {
 
 var _games map[string]game
 
-//InitGames => Initialise games from online data
+// InitGames => Initialise games from online data
 func InitGames(dataDir string, args CmdArgs) error {
 
 	var e error
@@ -314,6 +314,8 @@ func (d draw) printDraw() {
 	}
 
 	fmt.Printf("\nBucket Stats\n")
+	fmt.Printf("\nNAME            NUMBERS SUPP    MAXNUM  MAXSUPP DRAWS")
+	fmt.Printf("\n=====================================================")
 	// fmt.Printf("CrossSum:\t\t%d\n", int(di.Metrics.CrossSum))
 	// fmt.Printf("Avg:\t\t\t%.2f\n\n", di.Metrics.Avg)
 

@@ -1,6 +1,6 @@
 import create from 'zustand';
 
-import produce from 'immer';
+import {produce} from 'immer';
 import pipe from 'ramda/es/pipe';
 //import fetch from 'node-fetch';
 import fetch from 'isomorphic-unfetch'

@@ -13,19 +13,19 @@ module.exports = (api) => {
     return {
         
         "presets": [
-            ["@babel/preset-env",{"useBuiltIns":"entry","corejs":"3.18.1", "targets": {"node":"current"}}],
-            "@babel/preset-react",
-            "@babel/preset-typescript"
-        ],
+            ["@babel/preset-env",{"useBuiltIns":"entry","corejs":"3.33.2", "targets": "defaults"}],
+            "@babel/preset-react"
+            //"@babel/preset-typescript"
+       ],
         "plugins": [
             "jsx-control-statements",
             // "dynamic-import-node",
             // "@babel/plugin-syntax-import-meta",
             // ["@babel/plugin-proposal-decorators", {"legacy": true}],
-            // ["@babel/plugin-proposal-class-properties"],
+            ["@babel/plugin-transform-class-properties"],
             "@babel/plugin-transform-react-jsx",
-            // "@babel/plugin-proposal-export-namespace-from",
-            // "@babel/plugin-proposal-export-default-from",
+            "@babel/plugin-transform-export-namespace-from",
+            // "@babel/plugin-proposal-export-default-from"
             [
                 "@emotion",
                 {
@@ -40,9 +40,9 @@ module.exports = (api) => {
         "env": {
             "test": {
                 "presets": [
-                    ["@babel/preset-env",{"useBuiltIns":"entry","corejs":"3.18.1", "targets": {"node":"current"}}],
-                    "@babel/preset-react",
-                    "@babel/preset-typescript"
+                    ["@babel/preset-env",{"useBuiltIns":"entry","corejs":"3.33.2", "targets": "defaults"}],
+                    "@babel/preset-react"
+                    //"@babel/preset-typescript"
                 ],
                 "plugins": [
                     "@babel/plugin-transform-modules-commonjs",
