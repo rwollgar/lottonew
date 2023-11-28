@@ -13,7 +13,8 @@
         }
     },
     "scripts": {
-        "spa-build": "cross-env NODE_OPTIONS=--openssl-legacy-provider NODE_ENV=production webpack --mode production",
+        "spa-build": "cross-env NODE_ENV=production webpack --mode production",
+        "spa-build_backup": "cross-env NODE_OPTIONS=--openssl-legacy-provider NODE_ENV=production webpack --mode production",
         "spa-builddev": "cross-env NODE_OPTIONS=--openssl-legacy-provider NODE_ENV=development webpack --mode development",
         "spa-hotdev": "cross-env NODE_OPTIONS=--openssl-legacy-provider NODE_ENV=development NODE_OPTIONS=--openssl-legacy-provider webpack serve --progress --mode development",
         "buildgo-watch-win": "npm-watch buildgo-win",
@@ -53,6 +54,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+<<<<<<< HEAD
         "@babel/plugin-transform-class-properties": "^7.23.3",
         "@babel/plugin-transform-export-namespace-from": "^7.23.4",
         "@emotion/react": "^11.11.1",
@@ -69,10 +71,28 @@
         "immer": "^10.0.3",
         "isomorphic-unfetch": "^4.0.2",
         "ramda": "^0.29.1",
+=======
+        "@emotion/react": "^11.10.5",
+        "@emotion/styled": "^11.10.5",
+        "@mui/icons-material": "5.10.15",
+        "@mui/lab": "5.0.0-alpha.109",
+        "@mui/material": "5.10.15",
+        "@mui/styles": "5.10.15",
+        "@tanstack/react-location": "^3.7.4",
+        "core-js": "^3.26.1",
+        "dayjs": "^1.11.6",
+        "highcharts": "^10.3.1",
+        "highcharts-react-official": "^3.1.0",
+        "immer": "^9.0.16",
+        "isomorphic-unfetch": "^3.1.0",
+        "node-fetch": "^3.3.0",
+        "ramda": "^0.28.0",
+>>>>>>> ccb6730b7a39927281f85cc3a690cb1f47f3e88c
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-jsx-highcharts": "^5.0.1",
         "react-perfect-scrollbar": "^1.5.8",
+<<<<<<< HEAD
         "react-virtuoso": "^4.6.2",
         "use-async-effect": "^2.2.7",
         "zustand": "4.4.7"
@@ -93,10 +113,37 @@
         "babel-core": "^6.26.3",
         "babel-jest": "^29.7.0",
         "babel-loader": "^9.1.3",
+=======
+        "react-virtuoso": "^3.1.5",
+        "use-async-effect": "^2.2.7",
+        "zustand": "4.1.4"
+    },
+    "devDependencies": {
+        "@babel/plugin-proposal-class-properties": "^7.18.6",
+        "@babel/plugin-proposal-decorators": "^7.20.2",
+        "@babel/plugin-proposal-export-default-from": "^7.18.10",
+        "@babel/plugin-proposal-export-namespace-from": "^7.18.9",
+        "@babel/plugin-syntax-import-meta": "^7.10.4",
+        "@babel/plugin-transform-async-to-generator": "^7.18.6",
+        "@babel/plugin-transform-react-jsx": "^7.19.0",
+        "@babel/plugin-transform-regenerator": "^7.18.6",
+        "@babel/preset-env": "^7.20.2",
+        "@babel/preset-react": "^7.18.6",
+        "@babel/preset-typescript": "^7.18.6",
+        "@emotion/babel-plugin": "^11.10.5",
+        "@pmmmwh/react-refresh-webpack-plugin": "^0.5.10",
+        "@swc/cli": "^0.1.57",
+        "@swc/core": "^1.3.19",
+        "@tanstack/react-location-devtools": "^3.4.4",
+        "babel-core": "^6.26.3",
+        "babel-jest": "^29.3.1",
+        "babel-loader": "^9.1.0",
+>>>>>>> ccb6730b7a39927281f85cc3a690cb1f47f3e88c
         "babel-plugin-dynamic-import-node": "^2.3.3",
         "babel-plugin-jsx-control-statements": "^4.1.2",
         "babel-plugin-styled-components": "^2.1.4",
         "cross-env": "^7.0.3",
+<<<<<<< HEAD
         "css-loader": "^6.8.1",
         "enzyme": "^3.11.0",
         "file-loader": "^6.2.0",
@@ -107,17 +154,38 @@
         "jest": "^29.7.0",
         "jsx-control-statements": "^3.2.8",
         "nodemon": "^3.0.1",
+=======
+        "css-loader": "^6.7.2",
+        "enzyme": "^3.11.0",
+        "file-loader": "^6.2.0",
+        "git-revision-webpack-plugin": "^5.0.0",
+        "handlebars": "^4.7.7",
+        "handlebars-loader": "^1.7.2",
+        "html-webpack-plugin": "^5.5.0",
+        "jest": "^29.3.1",
+        "jsx-control-statements": "^3.2.8",
+        "nodemon": "^2.0.20",
+>>>>>>> ccb6730b7a39927281f85cc3a690cb1f47f3e88c
         "npm-run": "^5.0.1",
         "npm-run-all": "^4.1.5",
         "npm-watch": "^0.11.0",
         "react-json-view": "^1.21.3",
         "react-refresh": "^0.14.0",
         "react-test-renderer": "^18.2.0",
+<<<<<<< HEAD
         "typescript": "^5.3.2",
         "url-loader": "^4.1.1",
         "webpack": "^5.89.0",
         "webpack-cli": "^5.1.4",
         "webpack-dev-server": "^4.15.1",
+=======
+        "swc-loader": "^0.2.3",
+        "typescript": "^4.9.3",
+        "url-loader": "^4.1.1",
+        "webpack": "^5.75.0",
+        "webpack-cli": "^5.0.0",
+        "webpack-dev-server": "^4.11.1",
+>>>>>>> ccb6730b7a39927281f85cc3a690cb1f47f3e88c
         "webpack-event-plugin": "^1.1.1"
     }
 }
