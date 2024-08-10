@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"math"
 	"math/rand"
@@ -195,7 +194,7 @@ func initDraw(d draw, record []string) draw {
 	return d
 }
 
-//func generateBuckets(g game, startDraw draw, numberOfDraws int) *drawInfo {
+// func generateBuckets(g game, startDraw draw, numberOfDraws int) *drawInfo {
 func generateBuckets(startDraw *draw, numberOfDraws int) *drawInfo {
 
 	var di drawInfo
@@ -374,7 +373,7 @@ func getRandomNumbers(d draw, apikey string, url string) []int {
 
 		fmt.Println("response Status:", resp.Status)
 		fmt.Println("response Headers:", resp.Header)
-		body, _ := ioutil.ReadAll(resp.Body)
+		body, _ := io.ReadAll(resp.Body)
 		fmt.Println("\n\n\nresponse Body:", string(body))
 
 		var data randomApiResponse

@@ -1,0 +1,10 @@
+@HOST={{$dotenv APIHOST}}
+
+
+GET {{HOST}}/api/games
+Content-Type: application/json
+
+###
+
+GET {{HOST}}/api/games/oz-lotto
+Content-Type: application/json

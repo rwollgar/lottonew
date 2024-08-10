@@ -12,11 +12,12 @@ import (
 	"github.com/src/srv/models"
 
 	//errors "github.com/src/srv/errors"
+	echojwt "github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
 
-//ServerContext struct
+// ServerContext struct
 type ServerContext struct {
 	Args               models.CmdArgs
 	RandomNumberAPIURL string
@@ -24,12 +25,12 @@ type ServerContext struct {
 	RootDir            string
 }
 
-//Webserver => webserver
+// Webserver => webserver
 func Webserver() {
 	fmt.Println("Package: webserver")
 }
 
-//InitWebserver => Initialisze webserver and routes
+// InitWebserver => Initialisze webserver and routes
 func (s *ServerContext) InitWebserver() error {
 
 	if s.Args.UseWebUI || s.Args.UseWebserver {
@@ -40,11 +41,13 @@ func (s *ServerContext) InitWebserver() error {
 		e.Use(middleware.CORS())
 		e.Use(middleware.Logger())
 
-		e.Static("assets", s.Args.StaticDir)
+		e.Static("assets", fmt.Sprintf("%s//assets", s.Args.StaticDir))
+		e.Static("web", s.Args.StaticDir)
+		fmt.Printf("\nStatic Directory\t=> %s\n", s.Args.StaticDir)
 
 		g := e.Group("api/")
 
-		g.Use(middleware.JWTWithConfig(middleware.JWTConfig{
+		g.Use(echojwt.WithConfig(echojwt.Config{
 			Skipper:     jwtSkipper,
 			TokenLookup: "query:token",
 			SigningKey:  s.Args.JwtKey,
@@ -77,7 +80,7 @@ func (s *ServerContext) InitWebserver() error {
 
 }
 
-//ReturnError => Return error from webserver
+// ReturnError => Return error from webserver
 func ReturnError(w http.ResponseWriter, r *http.Request, status int, err error) {
 
 	code := strings.Replace(fmt.Sprintf("%T", err), "main.", "", 1)

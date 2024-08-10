@@ -11,7 +11,7 @@
             "mode": "auto",
             "program": "${workspaceFolder}/src/srv/cmd/main.go",
             "envFile":"${workspaceFolder}/.env",
-            "args": ["--web", "--game=powerball"]
+            "args": ["--web", "--game=monday-lotto"]
         },
         {
             "type": "chrome",
@@ -20,7 +20,7 @@
             "url": "http://localhost:8088"
         },        
         {
-            "type": "pwa-msedge",
+            "type": "msedge",
             "request": "launch",
             "name": "Debug Launch Edge on localhost",
             "url": "http://localhost:8088"
