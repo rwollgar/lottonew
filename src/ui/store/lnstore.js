@@ -2,8 +2,8 @@ import create from 'zustand';
 
 import {produce} from 'immer';
 import pipe from 'ramda/es/pipe';
-//import fetch from 'node-fetch';
-import fetch from 'isomorphic-unfetch'
+import fetch from 'node-fetch';
+//import fetch from 'isomorphic-unfetch'
 
 import lotto1 from '../assets/img/lottoballs_1.jpg';
 import lotto2 from '../assets/img/lottoballs_2.jpg';

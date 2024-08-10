@@ -133,34 +133,11 @@ func InitGames(dataDir string, args CmdArgs) error {
 	var e error
 	//const op lottoerrors.Operation = "models:initgames"
 
-	fmt.Println("Initialising Game data...")
+	//fmt.Println("Initialising Game data...")
+	fmt.Printf("Game data from\t\t=> %s\n\n", args.DataURL)
 	e = nil
 
 	wg := waitgroup.NewWaitGroup(10)
-
-	//Get the HTML from site
-	// fmt.Printf(args.DataURL)
-
-	// resp, err := http.Get(args.DataURL)
-
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-
-	//defer resp.Body.Close()
-
-	// document, err := goquery.NewDocumentFromReader(resp.Body)
-	// if err != nil {
-	// 	return lottoerrors.E(err, lottoerrors.Severity4, lottoerrors.Category3, op, "Error reading document")
-	// }
-
-	//Parse HTML and extract data urls
-	//_games, err = extractDataURL(_games, resp.Body)
-	//err = setDataURL(_games, resp.Body)
-
-	//if err != nil {
-	//	return err
-	//}
 
 	for ix, g := range _games {
 
@@ -195,7 +172,7 @@ func InitGames(dataDir string, args CmdArgs) error {
 	}
 
 	wg.Wait()
-	fmt.Println("FINISHED")
+	//fmt.Println("FINISHED")
 
 	thisGame := _games[args.Game]
 	thisDraw := thisGame.Draws[args.DrawOffset-1]
@@ -223,8 +200,9 @@ func GetGames() map[string]game {
 	return _games
 }
 
-func SetGames(games map[string]game) {
+func SetGames(games map[string]game) map[string]game {
 	_games = games
+	return games
 }
 
 func GetGamesInfo() []game {
@@ -290,7 +268,7 @@ func (d draw) printDraw() {
 
 	di := d.SetInfo
 
-	fmt.Printf("Game: %s. %d Draws\n\n", strings.ToUpper(d.Game.Name), di.DrawID)
+	fmt.Printf("\nGame: %s. %d Draws\n\n", strings.ToUpper(d.Game.Name), di.DrawID)
 	fmt.Printf("Numbers in set:\t\t%2v\n", di.Unique)
 	fmt.Printf("Numbers missing:\t%2v\n\n", di.Missing)
 

@@ -15,9 +15,9 @@ import (
 
 const drawDataURL = "https://www.lotterywest.wa.gov.au/results/frequency-charts/?soccerpoolsx"
 const randomAPIURL = "https://api.random.org/json-rpc/2/invoke"
-const staticDir = "C://gitrepos//playground//goprojects//lottonew//build"
+const staticDir = "C://gitrepos//playground//goprojects//lottonew//dist"
 
-//Parse command line switches
+// Parse command line switches
 func getArgs() models.CmdArgs {
 
 	args := models.CmdArgs{}
@@ -74,7 +74,7 @@ func run() error {
 
 	cwd, _ := os.Getwd()
 	rootDir := filepath.Dir(filepath.ToSlash(cwd))
-	fmt.Printf("Current Directory => %s\nRoot Directory => %s\n", cwd, rootDir)
+	fmt.Printf("Current Directory\t=> %s\nRoot Directory\t\t=> %s\nStatic Directory\t=> %s\n", cwd, rootDir, staticDir)
 
 	_, err := os.Stat(fmt.Sprintf("%s/data", rootDir))
 
@@ -91,7 +91,14 @@ func run() error {
 
 	//Read and process most current data from website
 	//data, err := GetData(fmt.Sprintf("%s/data", rootDir, drawDataURL, args)
-	models.SetGames(models.ConfigureGames())
+	g := models.SetGames(models.ConfigureGames())
+
+	//Check for valid game
+	if _, ok := g[args.Game]; !ok {
+		fmt.Printf("Game %s not found", args.Game)
+		os.Exit(1)
+	}
+
 	err = models.InitGames(fmt.Sprintf("%s/data", rootDir), args)
 	if err != nil {
 		return err //log.Fatal(err)
