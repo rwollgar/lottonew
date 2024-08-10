@@ -24,10 +24,15 @@
     "@mui/styled-engine-sc": "6.0.0-alpha.18",
     "@pigment-css/react": "0.0.20",
     "@tanstack/react-router": "^1.47.1",
+    "autoprefixer": "^10.4.20",
+    "flowbite": "^2.5.1",
+    "flowbite-react": "^0.10.1",
     "jsx-control-statements": "^3.2.8",
+    "postcss": "^8.4.41",
     "react": "19.0.0-rc-9d2da591-20240808",
     "react-dom": "19.0.0-rc-9d2da591-20240808",
-    "styled-components": "^6.1.12"
+    "styled-components": "^6.1.12",
+    "tailwindcss": "^3.4.9"
   },
   "devDependencies": {
     "@pigment-css/vite-plugin": "0.0.20",
