@@ -18,26 +18,17 @@
     "ginkgo-models-test": "cd ./src/srv & ginkgo -r ./models --v"
   },
   "dependencies": {
-    "@emotion/react": "^11.13.0",
-    "@emotion/styled": "^11.13.0",
     "@mui/material": "6.0.0-alpha.11",
     "@mui/styled-engine-sc": "6.0.0-alpha.18",
     "@pigment-css/react": "0.0.20",
-    "@tanstack/react-router": "^1.47.1",
-    "autoprefixer": "^10.4.20",
-    "flowbite": "^2.5.1",
-    "flowbite-react": "^0.10.1",
-    "jsx-control-statements": "^3.2.8",
-    "postcss": "^8.4.41",
+    "@tanstack/react-router": "^1.48.4",
     "react": "19.0.0-rc-9d2da591-20240808",
-    "react-dom": "19.0.0-rc-9d2da591-20240808",
-    "styled-components": "^6.1.12",
-    "tailwindcss": "^3.4.9"
+    "react-dom": "19.0.0-rc-9d2da591-20240808"
   },
   "devDependencies": {
     "@pigment-css/vite-plugin": "0.0.20",
-    "@tanstack/router-devtools": "^1.47.1",
-    "@tanstack/router-plugin": "^1.47.0",
+    "@tanstack/router-devtools": "^1.48.4",
+    "@tanstack/router-plugin": "^1.48.3",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
@@ -48,7 +39,7 @@
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.9",
     "npm-run-all": "^4.1.5",
-    "vite": "^5.4.0",
+    "vite": "^5.4.1",
     "vite-plugin-react-control-statements": "^1.0.1"
   }
 }
